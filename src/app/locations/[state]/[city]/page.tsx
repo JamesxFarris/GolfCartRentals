@@ -11,8 +11,6 @@ import JsonLd from "@/components/seo/JsonLd";
 import { stateAbbreviationToName } from "@/lib/utils";
 import type { Listing } from "@/types";
 
-export const dynamic = "force-dynamic";
-
 interface CityPageProps {
   params: { state: string; city: string };
   searchParams: { type?: string; passengers?: string; features?: string };

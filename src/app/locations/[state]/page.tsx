@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/layout";
 import { stateAbbreviationToName } from "@/lib/utils";
 import Card from "@/components/ui/Card";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface StatePageProps {
   params: { state: string };

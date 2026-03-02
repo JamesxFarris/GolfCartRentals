@@ -15,9 +15,10 @@ import {
   getCartTypeLabel,
   getFeatureLabel,
 } from "@/lib/utils";
+import PhotoGallery from "@/components/listings/PhotoGallery";
 import type { Listing } from "@/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface ListingDetailPageProps {
   params: { state: string; city: string; slug: string };
@@ -37,7 +38,9 @@ export async function generateMetadata({
   const stateName = stateAbbreviationToName(listing.state);
 
   return {
-    title: `${listing.name} - Golf Cart Rentals in ${listing.city}, ${stateName}`,
+    title:
+      listing.metaTitle ||
+      `${listing.name} - Golf Cart Rentals in ${listing.city}, ${stateName}`,
     description:
       listing.metaDescription ||
       `Rent golf carts from ${listing.name} in ${listing.city}, ${stateName}. View pricing, hours, features, and contact information.`,
@@ -225,6 +228,11 @@ export default async function ListingDetailPage({
             )}
           </div>
         </div>
+
+        {/* Photo Gallery */}
+        {listing.photos && listing.photos.length > 0 && (
+          <PhotoGallery photos={listing.photos} name={listing.name} />
+        )}
 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

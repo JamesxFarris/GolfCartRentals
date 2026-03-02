@@ -9,8 +9,6 @@ import ListingFilters from "@/components/listings/ListingFilters";
 import ActiveFilters from "@/components/search/ActiveFilters";
 import type { Listing } from "@/types";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Search Golf Cart Rentals | GolfCartsForRentNearMe.com",
   description:

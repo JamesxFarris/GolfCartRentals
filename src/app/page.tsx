@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Hero, LocationGrid, CartTypeCards, SEOContent } from "@/components/home";
 import JsonLd from "@/components/seo/JsonLd";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function HomePage() {
   // Fetch featured locations
