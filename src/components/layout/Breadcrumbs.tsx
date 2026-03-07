@@ -31,14 +31,14 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     <>
       <JsonLd data={jsonLd} />
       <nav aria-label="Breadcrumb" className="py-3">
-        <ol className="flex items-center flex-wrap gap-1 text-sm text-slate-500">
+        <ol className="flex items-center flex-wrap gap-1 text-sm text-slate-700">
           {allItems.map((item, index) => {
             const isLast = index === allItems.length - 1;
             return (
               <li key={item.href} className="flex items-center">
                 {index > 0 && (
                   <svg
-                    className="h-4 w-4 mx-1 text-slate-400 shrink-0"
+                    className="h-4 w-4 mx-1 text-slate-500 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
