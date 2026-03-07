@@ -31,28 +31,33 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </div>
+    <section className="relative bg-primary-900 overflow-hidden">
+      {/* Decorative shapes */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary-800 rounded-full -translate-y-1/2 translate-x-1/3 opacity-50" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-800 rounded-full translate-y-1/2 -translate-x-1/3 opacity-30" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary-700/30 rounded-full" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary-700/20 rounded-full" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
         <div className="text-center max-w-3xl mx-auto">
+          {/* Trust signal */}
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-8">
+            <span className="flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-accent-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-400" />
+            </span>
+            <span className="text-sm text-primary-100 font-medium">
+              183+ verified rental companies nationwide
+            </span>
+          </div>
+
           {/* Main heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight tracking-tight">
             Find Golf Cart Rentals{" "}
             <span className="block mt-2">
               <span
-                className={`inline-block text-accent-300 transition-opacity duration-500 ${
-                  isVisible ? "opacity-100" : "opacity-0"
+                className={`inline-block text-accent-400 transition-all duration-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                 }`}
               >
                 {rotatingLocations[currentIndex]}
@@ -61,9 +66,9 @@ export default function Hero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-6 text-lg sm:text-xl text-primary-100 max-w-2xl mx-auto leading-relaxed">
-            Browse hundreds of golf cart rental companies across America&apos;s
-            top destinations
+          <p className="mt-6 text-lg sm:text-xl text-primary-200 max-w-2xl mx-auto leading-relaxed">
+            Compare prices, check availability, and book from trusted rental
+            companies across America&apos;s top destinations
           </p>
 
           {/* Search bar */}
@@ -71,30 +76,26 @@ export default function Hero() {
             <SearchBar size="lg" />
           </div>
 
-          {/* Browse All Locations link */}
-          <div className="mt-6">
-            <Link
-              href="/locations"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-200 hover:text-white transition-colors"
-            >
-              Browse All Locations
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
+          {/* Quick links */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <span className="text-xs text-primary-400 uppercase tracking-wider font-medium">Popular:</span>
+            {["Myrtle Beach", "Destin", "The Villages", "Hilton Head"].map(
+              (city) => (
+                <Link
+                  key={city}
+                  href={`/search?q=${encodeURIComponent(city)}`}
+                  className="text-sm text-primary-200 hover:text-white transition-colors underline decoration-primary-600 hover:decoration-white underline-offset-4"
+                >
+                  {city}
+                </Link>
+              )
+            )}
           </div>
         </div>
       </div>
+
+      {/* Bottom edge accent */}
+      <div className="h-1 bg-accent-500" />
     </section>
   );
 }

@@ -6,6 +6,7 @@ import type { Listing } from "@/types";
 
 interface ListingCardProps {
   listing: Listing;
+  compact?: boolean;
 }
 
 const cartTypeBadgeVariant: Record<string, "orange" | "green" | "blue"> = {
@@ -14,12 +15,74 @@ const cartTypeBadgeVariant: Record<string, "orange" | "green" | "blue"> = {
   LSV: "blue",
 };
 
-export default function ListingCard({ listing }: ListingCardProps) {
+export default function ListingCard({ listing, compact = false }: ListingCardProps) {
   const stateSlug = slugify(listing.state);
   const citySlug = slugify(listing.city);
   const detailPath = `/locations/${stateSlug}/${citySlug}/${listing.slug}`;
 
   const hasPhotos = listing.photos && listing.photos.length > 0;
+
+  if (compact) {
+    return (
+      <Link href={detailPath} className="group block">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all duration-200">
+          {/* Thumbnail */}
+          <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-primary-50">
+            {hasPhotos ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={listing.photos[0]}
+                alt={listing.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-primary-300">
+                <svg className="h-7 w-7" viewBox="0 0 32 32" fill="none">
+                  <path
+                    d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-slate-900 group-hover:text-primary-700 transition-colors truncate">
+              {listing.name}
+            </p>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {listing.city}, {listing.state}
+            </p>
+            {listing.rateDaily ? (
+              <p className="text-xs mt-1">
+                <span className="font-semibold text-slate-900">
+                  {formatPrice(listing.rateDaily)}
+                </span>
+                <span className="text-slate-400">/day</span>
+              </p>
+            ) : null}
+          </div>
+
+          {/* Arrow */}
+          <svg
+            className="h-4 w-4 text-slate-300 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </Link>
+    );
+  }
+
   const isUnclaimed = listing.claimStatus === "UNCLAIMED";
 
   return (
@@ -38,14 +101,13 @@ export default function ListingCard({ listing }: ListingCardProps) {
               className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full min-h-[10rem] bg-gradient-to-br from-primary-100 via-primary-200 to-accent-100 flex items-center justify-center">
+            <div className="w-full h-full min-h-[10rem] bg-primary-800 flex items-center justify-center">
               <svg
-                className="h-16 w-16 text-primary-300"
+                className="h-16 w-16 text-primary-400 opacity-40"
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <rect x="4" y="12" width="20" height="10" rx="2" fill="currentColor" opacity="0.3" />
                 <path
                   d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
                   stroke="currentColor"
@@ -74,11 +136,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
               {listing.name}
             </Link>
 
-            <p className="text-sm text-slate-500 mt-1 flex items-center gap-1">
-              <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+            <p className="text-sm text-slate-500 mt-1">
               {listing.city}, {listing.state}
             </p>
 
@@ -116,17 +174,14 @@ export default function ListingCard({ listing }: ListingCardProps) {
             )}
 
             {listing.maxPassengers && (
-              <div className="flex items-center gap-1 text-sm text-slate-500">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span>{listing.maxPassengers} passengers</span>
-              </div>
+              <p className="text-sm text-slate-500">
+                {listing.maxPassengers} passengers
+              </p>
             )}
 
             <Link
               href={detailPath}
-              className="text-sm font-medium text-primary-700 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 rounded-lg px-5 py-2 transition-colors whitespace-nowrap"
+              className="text-sm font-medium text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-5 py-2 transition-colors whitespace-nowrap"
             >
               View Details
             </Link>

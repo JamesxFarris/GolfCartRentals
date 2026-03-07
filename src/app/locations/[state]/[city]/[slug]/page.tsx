@@ -155,21 +155,13 @@ export default async function ListingDetailPage({
               alt={listing.name}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-black/40" />
           </div>
         ) : (
-          <div className="relative h-48 sm:h-64 md:h-72 bg-gradient-to-br from-primary-700 via-primary-800 to-accent-700 overflow-hidden">
-            {/* Decorative pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="hero-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <circle cx="20" cy="20" r="2" fill="white" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#hero-pattern)" />
-              </svg>
-            </div>
+          <div className="relative h-48 sm:h-64 md:h-72 bg-primary-900 overflow-hidden">
+            {/* Decorative shapes */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-primary-800 rounded-full -translate-y-1/2 translate-x-1/3 opacity-50" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-800 rounded-full translate-y-1/2 -translate-x-1/3 opacity-30" />
           </div>
         )}
 
@@ -764,6 +756,7 @@ export default async function ListingDetailPage({
                       <ListingCard
                         key={nearby.id}
                         listing={nearby as Listing}
+                        compact
                       />
                     ))}
                   </div>

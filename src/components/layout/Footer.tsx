@@ -30,41 +30,64 @@ const browseByState = [
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
+    <footer className="bg-slate-900">
+      {/* CTA Banner */}
+      <div className="border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="text-xl font-bold text-white">
+                Own a golf cart rental business?
+              </h3>
+              <p className="text-slate-400 mt-1">
+                Get listed and reach thousands of customers looking for rentals near them.
+              </p>
+            </div>
+            <Link
+              href="/how-it-works"
+              className="shrink-0 px-6 py-3 bg-accent-600 hover:bg-accent-700 text-white font-semibold rounded-xl transition-colors text-sm"
+            >
+              List Your Business Free
+            </Link>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Column 1: Logo + Description */}
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <svg
-                className="h-7 w-7 text-primary-400"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect x="4" y="12" width="20" height="10" rx="2" fill="currentColor" opacity="0.2" />
-                <path
-                  d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M14 12V8a2 2 0 012-2h0a2 2 0 012 2v4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <div className="flex items-center justify-center w-8 h-8 bg-primary-600 rounded-lg">
+                <svg
+                  className="h-4 w-4 text-white"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M14 12V8a2 2 0 012-2h0a2 2 0 012 2v4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
               <span className="text-lg font-bold text-white">
-                GolfCarts<span className="text-primary-400">ForRent</span>NearMe
+                GolfCarts<span className="text-primary-400">ForRent</span>
               </span>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Find the best golf cart rentals in your area. Browse hundreds of
-              rental companies across America&apos;s top vacation destinations.
+              The largest directory of golf cart rental companies in the United
+              States. Compare prices, read details, and find the perfect rental.
             </p>
           </div>
 
@@ -73,7 +96,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Quick Links
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -92,7 +115,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Popular Locations
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {popularLocations.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -111,7 +134,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Browse by State
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {browseByState.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -132,7 +155,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
-              &copy; 2024 GolfCartsForRentNearMe.com. All rights reserved.
+              &copy; {new Date().getFullYear()} GolfCartsForRentNearMe.com. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link
