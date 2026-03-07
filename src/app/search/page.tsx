@@ -44,6 +44,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       { name: { contains: query, mode: "insensitive" } },
       { city: { contains: query, mode: "insensitive" } },
       { state: { contains: query, mode: "insensitive" } },
+      { zipCode: { contains: query, mode: "insensitive" } },
     ];
   }
 
