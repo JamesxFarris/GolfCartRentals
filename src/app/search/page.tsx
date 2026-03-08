@@ -8,6 +8,7 @@ import ListingGrid from "@/components/listings/ListingGrid";
 import ListingFilters from "@/components/listings/ListingFilters";
 import ActiveFilters from "@/components/search/ActiveFilters";
 import type { Listing } from "@/types";
+import { getZipCodeCoords, haversineDistance } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Search Golf Cart Rentals | GolfCartsForRentNearMe.com",
@@ -33,13 +34,25 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const page = parseInt(searchParams.page || "1", 10);
   const pageSize = 12;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = {
-    active: true,
-  };
+  const RADIUS_MILES = 100;
+  const ZIP_REGEX = /^\d{5}$/;
 
-  // Search by name, city, or state
-  if (query) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const where: any = { active: true };
+
+  let zipCoords: { lat: number; lon: number; city: string; state: string } | null = null;
+
+  if (query && ZIP_REGEX.test(query)) {
+    zipCoords = await getZipCodeCoords(query);
+  }
+
+  if (zipCoords) {
+    // Bounding box for 100-mile radius to narrow the DB query
+    const latDelta = RADIUS_MILES / 69;
+    const lonDelta = RADIUS_MILES / (69 * Math.cos((zipCoords.lat * Math.PI) / 180));
+    where.latitude = { gte: zipCoords.lat - latDelta, lte: zipCoords.lat + latDelta };
+    where.longitude = { gte: zipCoords.lon - lonDelta, lte: zipCoords.lon + lonDelta };
+  } else if (query) {
     where.OR = [
       { name: { contains: query, mode: "insensitive" } },
       { city: { contains: query, mode: "insensitive" } },
@@ -63,15 +76,34 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     where.features = { hasEvery: activeFeatures };
   }
 
-  const [listings, totalCount] = await Promise.all([
-    prisma.listing.findMany({
+  let listings: Listing[];
+  let totalCount: number;
+
+  if (zipCoords) {
+    // Fetch bounding box candidates then filter by exact Haversine distance
+    const candidates = await prisma.listing.findMany({
       where,
       orderBy: [{ featured: "desc" }, { name: "asc" }],
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    }),
-    prisma.listing.count({ where }),
-  ]);
+    });
+    const nearby = candidates.filter(
+      (l) =>
+        l.latitude != null &&
+        l.longitude != null &&
+        haversineDistance(zipCoords!.lat, zipCoords!.lon, l.latitude!, l.longitude!) <= RADIUS_MILES
+    );
+    totalCount = nearby.length;
+    listings = nearby.slice((page - 1) * pageSize, page * pageSize) as Listing[];
+  } else {
+    [listings, totalCount] = await Promise.all([
+      prisma.listing.findMany({
+        where,
+        orderBy: [{ featured: "desc" }, { name: "asc" }],
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.listing.count({ where }),
+    ]) as [Listing[], number];
+  }
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -112,7 +144,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {query && (
           <span className="text-slate-400">
             {" "}
-            for &ldquo;{query}&rdquo;
+            {zipCoords
+              ? `within ${RADIUS_MILES} miles of ${zipCoords.city}, ${zipCoords.state} (${query})`
+              : <>for &ldquo;{query}&rdquo;</>}
           </span>
         )}
       </p>

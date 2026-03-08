@@ -477,7 +477,10 @@ export default async function ListingDetailPage({
                 </h2>
                 <table className="w-full">
                   <tbody>
-                    {Object.entries(operatingHours).map(([day, hours]) => (
+                    {Object.entries(operatingHours).sort(([a], [b]) => {
+                        const order = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+                        return order.indexOf(a.toLowerCase()) - order.indexOf(b.toLowerCase());
+                      }).map(([day, hours]) => (
                       <tr
                         key={day}
                         className="border-b border-gray-100 last:border-0"

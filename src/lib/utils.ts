@@ -80,6 +80,37 @@ export function getFeatureLabel(feature: string): string {
   return labels[feature] || feature.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
+export function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 3958.8; // Earth radius in miles
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+export async function getZipCodeCoords(zip: string): Promise<{ lat: number; lon: number; city: string; state: string } | null> {
+  try {
+    const res = await fetch(`https://api.zippopotam.us/us/${zip}`, { next: { revalidate: 86400 } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const place = data.places?.[0];
+    if (!place) return null;
+    return {
+      lat: parseFloat(place.latitude),
+      lon: parseFloat(place.longitude),
+      city: place["place name"],
+      state: place["state abbreviation"],
+    };
+  } catch {
+    return null;
+  }
+}
+
 export const CART_TYPES = ["GAS", "ELECTRIC", "LSV"] as const;
 export const PASSENGER_OPTIONS = [2, 4, 6, 8] as const;
 export const FEATURES = [
