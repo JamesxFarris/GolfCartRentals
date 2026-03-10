@@ -88,6 +88,8 @@ export default async function ListingDetailPage({
   const canManagePhotos = isAdmin || isOwner;
 
   const stateName = stateAbbreviationToName(listing.state);
+  const stateSlug = slugify(stateName);
+  const citySlug = slugify(listing.city);
 
   // Fetch nearby listings
   const nearbyListings = await prisma.listing.findMany({
@@ -166,9 +168,9 @@ export default async function ListingDetailPage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
       { "@type": "ListItem", position: 2, name: "Locations", item: `${baseUrl}/locations` },
-      { "@type": "ListItem", position: 3, name: stateName, item: `${baseUrl}/locations/${params.state}` },
-      { "@type": "ListItem", position: 4, name: listing.city, item: `${baseUrl}/locations/${params.state}/${params.city}` },
-      { "@type": "ListItem", position: 5, name: listing.name, item: `${baseUrl}/locations/${params.state}/${params.city}/${params.slug}` },
+      { "@type": "ListItem", position: 3, name: stateName, item: `${baseUrl}/locations/${stateSlug}` },
+      { "@type": "ListItem", position: 4, name: listing.city, item: `${baseUrl}/locations/${stateSlug}/${citySlug}` },
+      { "@type": "ListItem", position: 5, name: listing.name, item: `${baseUrl}/locations/${stateSlug}/${citySlug}/${listing.slug}` },
     ],
   };
 
@@ -302,14 +304,14 @@ export default async function ListingDetailPage({
         <Breadcrumbs
           items={[
             { label: "Locations", href: "/locations" },
-            { label: stateName, href: `/locations/${params.state}` },
+            { label: stateName, href: `/locations/${stateSlug}` },
             {
               label: listing.city,
-              href: `/locations/${params.state}/${params.city}`,
+              href: `/locations/${stateSlug}/${citySlug}`,
             },
             {
               label: listing.name,
-              href: `/locations/${params.state}/${params.city}/${params.slug}`,
+              href: `/locations/${stateSlug}/${citySlug}/${listing.slug}`,
             },
           ]}
         />
