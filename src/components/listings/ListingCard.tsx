@@ -86,108 +86,101 @@ export default function ListingCard({ listing, compact = false }: ListingCardPro
   const isUnclaimed = listing.claimStatus === "UNCLAIMED";
 
   return (
-    <Card hover className="overflow-hidden">
-      <div className="flex flex-col sm:flex-row">
-        {/* Photo section */}
-        <Link
-          href={detailPath}
-          className="block relative w-full sm:w-56 md:w-64 shrink-0 h-48 sm:h-auto sm:min-h-[12rem] overflow-hidden"
-        >
-          {hasPhotos ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={listing.photos[0]}
-              alt={listing.name}
-              className="block w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full min-h-[10rem] bg-primary-800 flex items-center justify-center">
-              <svg
-                className="h-16 w-16 text-primary-400 opacity-40"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          )}
-          {isUnclaimed && (
-            <div className="absolute top-2 right-2 sm:right-auto sm:left-2">
-              <Badge variant="orange">Claim This Listing</Badge>
-            </div>
-          )}
-        </Link>
-
-        {/* Content section */}
-        <div className="flex-1 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:gap-6">
-          {/* Main info */}
-          <div className="flex-1 min-w-0">
-            <Link
-              href={detailPath}
-              className="text-lg font-bold text-slate-900 hover:text-primary-700 transition-colors line-clamp-1"
-            >
-              {listing.name}
-            </Link>
-
-            <p className="text-sm text-slate-500 mt-1">
-              {listing.city}, {listing.state}
-            </p>
-
-            {listing.cartTypes && listing.cartTypes.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {listing.cartTypes.map((type) => (
-                  <Badge
-                    key={type}
-                    variant={cartTypeBadgeVariant[type] || "gray"}
-                  >
-                    {type}
-                  </Badge>
-                ))}
+    <Link href={detailPath} className="group block">
+      <Card hover className="overflow-hidden">
+        <div className="flex flex-col sm:flex-row">
+          {/* Photo section */}
+          <div className="relative w-full sm:w-56 md:w-64 shrink-0 h-48 sm:h-auto sm:min-h-[12rem] overflow-hidden">
+            {hasPhotos ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={listing.photos[0]}
+                alt={listing.name}
+                className="block w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full min-h-[10rem] bg-primary-800 flex items-center justify-center">
+                <svg
+                  className="h-16 w-16 text-primary-400 opacity-40"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22V14a2 2 0 012-2h14a2 2 0 012 2v2l2 2v4h-2m-16 0H6m0 0a2 2 0 104 0H6zm16 0a2 2 0 104 0h-4z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             )}
-
-            {listing.description && (
-              <p className="text-sm text-slate-500 mt-2 line-clamp-2 hidden md:block">
-                {listing.description}
-              </p>
+            {isUnclaimed && (
+              <div className="absolute top-2 right-2 sm:right-auto sm:left-2">
+                <Badge variant="orange">Claim This Listing</Badge>
+              </div>
             )}
           </div>
 
-          {/* Right side — pricing, passengers, CTA */}
-          <div className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2 mt-3 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
-            {listing.rateDaily ? (
-              <p className="text-sm whitespace-nowrap">
-                <span className="font-semibold text-lg text-slate-900">
-                  {formatPrice(listing.rateDaily)}
-                </span>
-                <span className="text-slate-500"> /day</span>
-              </p>
-            ) : (
-              <p className="text-sm text-slate-500">Contact for pricing</p>
-            )}
+          {/* Content section */}
+          <div className="flex-1 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:gap-6">
+            {/* Main info */}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary-700 transition-colors line-clamp-1">
+                {listing.name}
+              </h3>
 
-            {listing.maxPassengers && (
-              <p className="text-sm text-slate-500">
-                {listing.maxPassengers} passengers
+              <p className="text-sm text-slate-500 mt-1">
+                {listing.city}, {listing.state}
               </p>
-            )}
 
-            <Link
-              href={detailPath}
-              className="text-sm font-medium text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-5 py-2 transition-colors whitespace-nowrap"
-            >
-              View Details
-            </Link>
+              {listing.cartTypes && listing.cartTypes.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {listing.cartTypes.map((type) => (
+                    <Badge
+                      key={type}
+                      variant={cartTypeBadgeVariant[type] || "gray"}
+                    >
+                      {type}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {listing.description && (
+                <p className="text-sm text-slate-500 mt-2 line-clamp-2 hidden md:block">
+                  {listing.description}
+                </p>
+              )}
+            </div>
+
+            {/* Right side — pricing, passengers, CTA */}
+            <div className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-2 mt-3 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
+              {listing.rateDaily ? (
+                <p className="text-sm whitespace-nowrap">
+                  <span className="font-semibold text-lg text-slate-900">
+                    {formatPrice(listing.rateDaily)}
+                  </span>
+                  <span className="text-slate-500"> /day</span>
+                </p>
+              ) : (
+                <p className="text-sm text-slate-500">Contact for pricing</p>
+              )}
+
+              {listing.maxPassengers && (
+                <p className="text-sm text-slate-500">
+                  {listing.maxPassengers} passengers
+                </p>
+              )}
+
+              <span className="text-sm font-medium text-white bg-primary-700 group-hover:bg-primary-800 rounded-lg px-5 py-2 transition-colors whitespace-nowrap">
+                View Details
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }
