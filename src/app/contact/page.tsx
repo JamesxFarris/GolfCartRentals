@@ -3,9 +3,10 @@ import { Breadcrumbs } from "@/components/layout";
 import Card from "@/components/ui/Card";
 
 export const metadata: Metadata = {
-  title: "Contact Us | GolfCartsForRentNearMe.com",
+  title: "Contact Us",
   description:
     "Get in touch with the GolfCartsForRentNearMe.com team. We are here to help with questions about listings, claiming your business, or general inquiries.",
+  alternates: { canonical: "https://golfcartsforrentnearme.com/contact" },
 };
 
 export default function ContactPage() {

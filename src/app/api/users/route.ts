@@ -15,6 +15,10 @@ export async function GET() {
         _count: {
           select: { listings: true },
         },
+        listings: {
+          select: { id: true, name: true },
+          where: { active: true },
+        },
       },
       orderBy: { createdAt: "desc" },
     });

@@ -11,9 +11,18 @@ import type { Listing } from "@/types";
 import { getZipCodeCoords, haversineDistance } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Search Golf Cart Rentals | GolfCartsForRentNearMe.com",
+  title: "Search Golf Cart Rentals",
   description:
     "Search for golf cart rentals by location, type, and features. Find the perfect rental near you.",
+  openGraph: {
+    title: "Search Golf Cart Rentals",
+    description:
+      "Search for golf cart rentals by location, type, and features. Find the perfect rental near you.",
+    url: "https://golfcartsforrentnearme.com/search",
+  },
+  alternates: {
+    canonical: "https://golfcartsforrentnearme.com/search",
+  },
 };
 
 interface SearchPageProps {

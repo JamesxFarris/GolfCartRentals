@@ -4,9 +4,10 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Us | GolfCartsForRentNearMe.com",
+  title: "About Us",
   description:
     "Learn about GolfCartsForRentNearMe.com, the leading directory for golf cart rental businesses across the United States.",
+  alternates: { canonical: "https://golfcartsforrentnearme.com/about" },
 };
 
 export default function AboutPage() {

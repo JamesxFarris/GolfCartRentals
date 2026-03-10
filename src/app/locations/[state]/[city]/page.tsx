@@ -29,11 +29,17 @@ export async function generateMetadata({
 
   const stateName = stateAbbreviationToName(location.state);
 
+  const title = `Golf Cart Rentals in ${location.city}, ${stateName}`;
+  const description =
+    location.metaDescription ||
+    `Find golf cart rentals in ${location.city}, ${stateName}. Compare prices, read reviews, and book your golf cart rental today.`;
+  const url = `https://golfcartsforrentnearme.com/locations/${params.state}/${params.city}`;
+
   return {
-    title: `Golf Cart Rentals in ${location.city}, ${stateName} | GolfCartsForRentNearMe.com`,
-    description:
-      location.metaDescription ||
-      `Find golf cart rentals in ${location.city}, ${stateName}. Compare prices, read reviews, and book your golf cart rental today.`,
+    title,
+    description,
+    openGraph: { title, description, url },
+    alternates: { canonical: url },
   };
 }
 

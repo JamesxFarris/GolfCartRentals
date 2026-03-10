@@ -37,21 +37,73 @@ export async function GET(
   }
 }
 
+// Fields that business owners are allowed to edit
+const OWNER_EDITABLE_FIELDS = [
+  "name",
+  "description",
+  "streetAddress",
+  "city",
+  "state",
+  "zipCode",
+  "phone",
+  "email",
+  "website",
+  "cartTypes",
+  "maxPassengers",
+  "rentalRadius",
+  "rateHourly",
+  "rateDaily",
+  "rateWeekly",
+  "rateMonthly",
+  "features",
+  "operatingHours",
+];
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || (session.user as { role: string }).role !== "ADMIN") {
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const isAdmin = session.user.role === "ADMIN";
+
+    // Check if user is the owner of this listing
+    const existingListing = await prisma.listing.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!existingListing) {
+      return NextResponse.json({ error: "Listing not found" }, { status: 404 });
+    }
+
+    const isOwner =
+      existingListing.claimStatus === "CLAIMED" &&
+      existingListing.claimedById === session.user.id;
+
+    if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
 
+    // If owner (not admin), restrict to allowed fields
+    let data = body;
+    if (!isAdmin) {
+      data = {};
+      for (const field of OWNER_EDITABLE_FIELDS) {
+        if (body[field] !== undefined) {
+          data[field] = body[field];
+        }
+      }
+    }
+
     const listing = await prisma.listing.update({
       where: { id: params.id },
-      data: body,
+      data,
     });
 
     return NextResponse.json(listing);
@@ -70,11 +122,10 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || (session.user as { role: string }).role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Soft delete: set active to false
     const listing = await prisma.listing.update({
       where: { id: params.id },
       data: { active: false },

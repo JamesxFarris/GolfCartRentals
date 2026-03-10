@@ -12,6 +12,7 @@ import ListingCard from "@/components/listings/ListingCard";
 import PhotoManager from "@/components/listings/PhotoManager";
 import JsonLd from "@/components/seo/JsonLd";
 import {
+  slugify,
   stateAbbreviationToName,
   formatPrice,
   formatPhone,
@@ -38,14 +39,33 @@ export async function generateMetadata({
   }
 
   const stateName = stateAbbreviationToName(listing.state);
+  const title =
+    listing.metaTitle ||
+    `${listing.name} - Golf Cart Rentals in ${listing.city}, ${stateName}`;
+  const description =
+    listing.metaDescription ||
+    `Rent golf carts from ${listing.name} in ${listing.city}, ${stateName}. View pricing, hours, features, and contact information.`;
+  const url = `https://golfcartsforrentnearme.com/locations/${slugify(stateName)}/${slugify(listing.city)}/${listing.slug}`;
 
   return {
-    title:
-      listing.metaTitle ||
-      `${listing.name} - Golf Cart Rentals in ${listing.city}, ${stateName}`,
-    description:
-      listing.metaDescription ||
-      `Rent golf carts from ${listing.name} in ${listing.city}, ${stateName}. View pricing, hours, features, and contact information.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      images: listing.photos.length > 0 ? [{ url: listing.photos[0], width: 1200, height: 800, alt: listing.name }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: listing.photos.length > 0 ? [listing.photos[0]] : undefined,
+    },
+    alternates: {
+      canonical: url,
+    },
   };
 }
 
@@ -139,11 +159,25 @@ export default async function ListingDetailPage({
       : undefined,
   };
 
+  const baseUrl = "https://golfcartsforrentnearme.com";
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+      { "@type": "ListItem", position: 2, name: "Locations", item: `${baseUrl}/locations` },
+      { "@type": "ListItem", position: 3, name: stateName, item: `${baseUrl}/locations/${params.state}` },
+      { "@type": "ListItem", position: 4, name: listing.city, item: `${baseUrl}/locations/${params.state}/${params.city}` },
+      { "@type": "ListItem", position: 5, name: listing.name, item: `${baseUrl}/locations/${params.state}/${params.city}/${params.slug}` },
+    ],
+  };
+
   const hasPhotos = listing.photos && listing.photos.length > 0;
 
   return (
     <>
       <JsonLd data={jsonLd} />
+      <JsonLd data={breadcrumbLd} />
 
       {/* Hero Section */}
       <div className="relative">

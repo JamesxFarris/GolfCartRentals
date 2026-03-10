@@ -13,6 +13,7 @@ const navLinks = [
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [session, setSession] = useState<{ user?: { name?: string; role?: string } } | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +22,17 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.user) setSession(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const dashboardHref = session?.user?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
     <nav
@@ -76,7 +88,25 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="ml-3 pl-3 border-l border-gray-200">
+            <div className="ml-3 pl-3 border-l border-gray-200 flex items-center gap-2">
+              {session?.user ? (
+                <Link
+                  href={dashboardHref}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-primary-700 hover:bg-primary-50 transition-colors"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-primary-700 hover:bg-primary-50 transition-colors"
+                >
+                  Sign In
+                </Link>
+              )}
               <Button variant="accent" size="sm" href="/how-it-works">
                 List Your Business
               </Button>
@@ -106,7 +136,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? "max-h-80 pb-4" : "max-h-0"
+            mobileMenuOpen ? "max-h-96 pb-4" : "max-h-0"
           }`}
         >
           <div className="flex flex-col gap-1 pt-2 border-t border-gray-100">
@@ -120,6 +150,23 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            {session?.user ? (
+              <Link
+                href={dashboardHref}
+                className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-600 hover:text-primary-700 hover:bg-primary-50 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="block px-3 py-2.5 rounded-lg text-base font-medium text-slate-600 hover:text-primary-700 hover:bg-primary-50 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Sign In
+              </Link>
+            )}
             <div className="px-3 pt-2">
               <Button variant="accent" size="md" href="/how-it-works" className="w-full">
                 List Your Business

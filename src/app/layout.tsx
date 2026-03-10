@@ -8,10 +8,34 @@ const inter = localFont({
   variable: "--font-inter",
 });
 
+const BASE_URL = "https://golfcartsforrentnearme.com";
+
 export const metadata: Metadata = {
-  title: "Golf Cart Rentals Near You | GolfCartsForRentNearMe.com",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Golf Cart Rentals Near You | GolfCartsForRentNearMe.com",
+    template: "%s | GolfCartsForRentNearMe.com",
+  },
   description:
     "Find the best golf cart rentals near you. Browse hundreds of rental companies, compare prices, and book your golf cart rental today. Electric, gas, and LSV options available.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: BASE_URL,
+    siteName: "GolfCartsForRentNearMe.com",
+    title: "Golf Cart Rentals Near You | GolfCartsForRentNearMe.com",
+    description:
+      "Find the best golf cart rentals near you. Browse hundreds of rental companies, compare prices, and book your golf cart rental today.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Golf Cart Rentals Near You | GolfCartsForRentNearMe.com",
+    description:
+      "Find the best golf cart rentals near you. Browse hundreds of rental companies, compare prices, and book today.",
+  },
+  alternates: {
+    canonical: BASE_URL,
+  },
 };
 
 export default function RootLayout({

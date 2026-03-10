@@ -8,9 +8,18 @@ import Card from "@/components/ui/Card";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Browse Golf Cart Rental Locations | GolfCartsForRentNearMe.com",
+  title: "Browse Golf Cart Rental Locations",
   description:
     "Browse golf cart rental locations across the United States. Find rental companies by state and city.",
+  openGraph: {
+    title: "Browse Golf Cart Rental Locations",
+    description:
+      "Browse golf cart rental locations across the United States. Find rental companies by state and city.",
+    url: "https://golfcartsforrentnearme.com/locations",
+  },
+  alternates: {
+    canonical: "https://golfcartsforrentnearme.com/locations",
+  },
 };
 
 export default async function LocationsPage() {

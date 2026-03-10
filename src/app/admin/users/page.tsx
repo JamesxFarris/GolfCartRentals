@@ -2,6 +2,11 @@
 
 import { useState, useEffect } from "react";
 
+interface UserListing {
+  id: string;
+  name: string;
+}
+
 interface User {
   id: string;
   name: string;
@@ -12,6 +17,7 @@ interface User {
   _count: {
     listings: number;
   };
+  listings?: UserListing[];
 }
 
 export default function AdminUsersPage() {
@@ -21,6 +27,7 @@ export default function AdminUsersPage() {
   const [editRole, setEditRole] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [pullingOwnership, setPullingOwnership] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -84,6 +91,29 @@ export default function AdminUsersPage() {
       alert("Failed to delete user");
     }
     setDeleteId(null);
+  };
+
+  const handlePullOwnership = async (listingId: string) => {
+    setPullingOwnership(listingId);
+    try {
+      const res = await fetch("/api/admin/pull-ownership", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listingId }),
+      });
+
+      if (res.ok) {
+        await fetchUsers();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to pull ownership");
+      }
+    } catch (error) {
+      console.error("Error pulling ownership:", error);
+      alert("Failed to pull ownership");
+    } finally {
+      setPullingOwnership(null);
+    }
   };
 
   const formatDate = (dateStr: string) => {
@@ -192,6 +222,22 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
                     {user._count.listings}
+                    {user.listings && user.listings.length > 0 && (
+                      <div className="mt-1 space-y-1">
+                        {user.listings.map((listing) => (
+                          <div key={listing.id} className="flex items-center gap-1">
+                            <span className="text-xs text-gray-400 truncate max-w-[120px]">{listing.name}</span>
+                            <button
+                              onClick={() => handlePullOwnership(listing.id)}
+                              disabled={pullingOwnership === listing.id}
+                              className="text-xs text-orange-600 hover:text-orange-800 font-medium whitespace-nowrap"
+                            >
+                              {pullingOwnership === listing.id ? "..." : "Pull"}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
                     {formatDate(user.createdAt)}

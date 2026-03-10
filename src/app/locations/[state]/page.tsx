@@ -25,10 +25,15 @@ export async function generateMetadata({
   }
 
   const stateName = stateAbbreviationToName(locations[0].state);
+  const title = `Golf Cart Rentals in ${stateName}`;
+  const description = `Browse golf cart rental companies in ${stateName}. Compare prices, features, and availability across multiple cities.`;
+  const url = `https://golfcartsforrentnearme.com/locations/${params.state}`;
 
   return {
-    title: `Golf Cart Rentals in ${stateName} | GolfCartsForRentNearMe.com`,
-    description: `Browse golf cart rental companies in ${stateName}. Compare prices, features, and availability across multiple cities.`,
+    title,
+    description,
+    openGraph: { title, description, url },
+    alternates: { canonical: url },
   };
 }
 

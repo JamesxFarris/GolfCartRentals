@@ -4,9 +4,10 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "How It Works | GolfCartsForRentNearMe.com",
+  title: "How It Works",
   description:
     "Learn how GolfCartsForRentNearMe.com works for both renters and golf cart rental businesses. Find rentals or claim your listing today.",
+  alternates: { canonical: "https://golfcartsforrentnearme.com/how-it-works" },
 };
 
 export default function HowItWorksPage() {
