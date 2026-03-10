@@ -187,7 +187,7 @@ export default async function ListingDetailPage({
             <img
               src={listing.photos[0]}
               alt={listing.name}
-              className="w-full h-full object-cover"
+              className="block w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/40" />
           </div>

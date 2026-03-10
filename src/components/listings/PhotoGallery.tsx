@@ -20,7 +20,7 @@ export default function PhotoGallery({ photos, name }: PhotoGalleryProps) {
         <img
           src={photos[activeIndex]}
           alt={`${name} - photo ${activeIndex + 1} of ${photos.length}`}
-          className="w-full h-full object-cover"
+          className="block w-full h-full object-cover"
         />
         {photos.length > 1 && (
           <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs font-medium px-2 py-1 rounded-full">
@@ -46,7 +46,7 @@ export default function PhotoGallery({ photos, name }: PhotoGalleryProps) {
               <img
                 src={photo}
                 alt={`${name} - thumbnail ${i + 1}`}
-                className="w-full h-full object-cover"
+                className="block w-full h-full object-cover"
               />
             </button>
           ))}

@@ -98,7 +98,7 @@ export default function ListingCard({ listing, compact = false }: ListingCardPro
             <img
               src={listing.photos[0]}
               alt={listing.name}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              className="block w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
           ) : (
             <div className="w-full h-full min-h-[10rem] bg-primary-800 flex items-center justify-center">
