@@ -91,7 +91,7 @@ export default function ListingCard({ listing, compact = false }: ListingCardPro
         {/* Photo section */}
         <Link
           href={detailPath}
-          className="block relative w-full sm:w-56 md:w-64 shrink-0 h-48 overflow-hidden"
+          className="block relative w-full sm:w-56 md:w-64 shrink-0 h-48 sm:h-auto sm:min-h-[12rem] overflow-hidden"
         >
           {hasPhotos ? (
             // eslint-disable-next-line @next/next/no-img-element
