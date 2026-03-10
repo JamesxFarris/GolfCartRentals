@@ -21,7 +21,7 @@ import {
 } from "@/lib/utils";
 import type { Listing } from "@/types";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 interface ListingDetailPageProps {
   params: { state: string; city: string; slug: string };
